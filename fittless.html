@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Tracking Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+
+        .card-title {
+            font-size: 1.2em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .card-unit {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .weekly-summary {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .weekly-summary h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+
+        .weekly-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .day-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .day-card:hover {
+            transform: scale(1.05);
+        }
+
+        .day-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .day-stats {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .day-stats div {
+            margin: 5px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            color: #667eea;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .reset-btn {
+            background: #ff6b6b;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-value {
+                font-size: 2em;
+            }
+
+            .weekly-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>💪 Fitness Tracker Dashboard</h1>
+            <p>Track your daily fitness goals and achieve your targets</p>
+        </div>
+
+        <!-- Daily Stats Cards -->
+        <div class="dashboard-grid">
+            <!-- Steps Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">👟</div>
+                    <div class="card-title">Daily Steps</div>
+                </div>
+                <div class="card-value" id="stepsValue">0</div>
+                <div class="card-unit">steps</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="stepsProgress" style="width: 0%">0%</div>
+                </div>
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>Add Steps:</label>
+                    <input type="number" id="stepsInput" placeholder="Enter steps count" min="0">
+                    <button class="btn" onclick="addSteps()" style="margin-top: 10px;">Add Steps</button>
+                </div>
+            </div>
+
+            <!-- Workout Time Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">⏱️</div>
+                    <div class="card-title">Workout Time</div>
+                </div>
+                <div class="card-value" id="workoutValue">0</div>
+                <div class="card-unit">minutes</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="workoutProgress" style="width: 0%">0%</div>
+                </div>
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>Add Workout (minutes):</label>
+                    <input type="number" id="workoutInput" placeholder="Enter workout minutes" min="0">
+                    <button class="btn" onclick="addWorkout()" style="margin-top: 10px;">Add Workout</button>
+                </div>
+            </div>
+
+            <!-- Calories Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🔥</div>
+                    <div class="card-title">Calories Burned</div>
+                </div>
+                <div class="card-value" id="caloriesValue">0</div>
+                <div class="card-unit">kcal</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="caloriesProgress" style="width: 0%">0%</div>
+                </div>
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>Add Calories:</label>
+                    <input type="number" id="caloriesInput" placeholder="Enter calories burned" min="0">
+                    <button class="btn" onclick="addCalories()" style="margin-top: 10px;">Add Calories</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Summary -->
+        <div class="weekly-summary">
+            <h2>📊 Weekly Summary</h2>
+            <div class="weekly-grid" id="weeklySummary"></div>
+        </div>
+
+        <!-- Weekly Statistics -->
+        <div class="card">
+            <h2 style="color: #333; margin-bottom: 20px;">📈 Weekly Statistics</h2>
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="stat-label">Total Steps This Week</div>
+                    <div class="stat-value" id="weeklySteps">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total Workout Time</div>
+                    <div class="stat-value" id="weeklyWorkout">0 min</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total Calories Burned</div>
+                    <div class="stat-value" id="weeklyCalories">0 kcal</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Days Active</div>
+                    <div class="stat-value" id="daysActive">0</div>
+                </div>
+            </div>
+            <button class="btn reset-btn" onclick="resetAllData()">🔄 Reset All Data</button>
+        </div>
+    </div>
+
+    <script>
+        // Goal targets
+        const GOALS = {
+            steps: 10000,
+            workout: 60,
+            calories: 500
+        };
+
+        // Days of the week
+        const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+        // Initialize data from localStorage
+        function initializeData() {
+            const today = new Date().toISOString().split('T')[0];
+            let data = JSON.parse(localStorage.getItem('fitnessData'));
+
+            if (!data) {
+                data = initNewWeek();
+            } else if (data.lastDate !== today) {
+                // Check if we need to start a new week
+                const lastDate = new Date(data.lastDate);
+                const currentDate = new Date(today);
+                const daysDiff = Math.floor((currentDate - lastDate) / (1000 * 60 * 60 * 24));
+
+                if (daysDiff >= 7) {
+                    data = initNewWeek();
+                } else if (daysDiff > 0) {
+                    // New day, add it to the week
+                    addNewDay(data);
+                }
+            }
+
+            data.lastDate = today;
+            localStorage.setItem('fitnessData', JSON.stringify(data));
+            return data;
+        }
+
+        function initNewWeek() {
+            return {
+                week: DAYS.map(day => ({
+                    day: day,
+                    steps: 0,
+                    workout: 0,
+                    calories: 0
+                })),
+                currentDay: new Date().getDay() === 0 ? 6 : new Date().getDay() - 1,
+                lastDate: new Date().toISOString().split('T')[0]
+            };
+        }
+
+        function addNewDay(data) {
+            data.currentDay = (data.currentDay + 1) % 7;
+            data.week[data.currentDay] = {
+                day: DAYS[data.currentDay],
+                steps: 0,
+                workout: 0,
+                calories: 0
+            };
+        }
+
+        // Add steps
+        function addSteps() {
+            const input = document.getElementById('stepsInput');
+            const value = parseInt(input.value);
+
+            if (isNaN(value) || value <= 0) {
+                alert('Please enter a valid number');
+                return;
+            }
+
+            const data = JSON.parse(localStorage.getItem('fitnessData'));
+            data.week[data.currentDay].steps += value;
+            localStorage.setItem('fitnessData', JSON.stringify(data));
+            input.value = '';
+            updateDashboard();
+        }
+
+        // Add workout time
+        function addWorkout() {
+            const input = document.getElementById('workoutInput');
+            const value = parseInt(input.value);
+
+            if (isNaN(value) || value <= 0) {
+                alert('Please enter a valid number');
+                return;
+            }
+
+            const data = JSON.parse(localStorage.getItem('fitnessData'));
+            data.week[data.currentDay].workout += value;
+            localStorage.setItem('fitnessData', JSON.stringify(data));
+            input.value = '';
+            updateDashboard();
+        }
+
+        // Add calories
+        function addCalories() {
+            const input = document.getElementById('caloriesInput');
+            const value = parseInt(input.value);
+
+            if (isNaN(value) || value <= 0) {
+                alert('Please enter a valid number');
+                return;
+            }
+
+            const data = JSON.parse(localStorage.getItem('fitnessData'));
+            data.week[data.currentDay].calories += value;
+            localStorage.setItem('fitnessData', JSON.stringify(data));
+            input.value = '';
+            updateDashboard();
+        }
+
+        // Update dashboard
+        function updateDashboard() {
+            const data = JSON.parse(localStorage.getItem('fitnessData'));
+            const today = data.week[data.currentDay];
+
+            // Update daily stats
+            document.getElementById('stepsValue').textContent = today.steps.toLocaleString();
+            document.getElementById('workoutValue').textContent = today.workout;
+            document.getElementById('caloriesValue').textContent = today.calories;
+
+            // Update progress bars
+            updateProgressBar('stepsProgress', today.steps, GOALS.steps);
+            updateProgressBar('workoutProgress', today.workout, GOALS.workout);
+            updateProgressBar('caloriesProgress', today.calories, GOALS.calories);
+
+            // Update weekly summary
+            updateWeeklySummary(data);
+            updateWeeklyStats(data);
+        }
+
+        function updateProgressBar(elementId, current, goal) {
+            const percentage = Math.min((current / goal) * 100, 100);
+            const element = document.getElementById(elementId);
+            element.style.width = percentage + '%';
+            element.textContent = Math.round(percentage) + '%';
+        }
+
+        function updateWeeklySummary(data) {
+            const summaryHtml = data.week.map((day, index) => {
+                const isToday = index === data.currentDay;
+                return `
+                    <div class="day-card" style="${isToday ? 'box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5);' : ''}">
+                        <div class="day-name">${day.day.substring(0, 3)}</div>
+                        <div class="day-stats">
+                            <div>👟 ${day.steps.toLocaleString()}</div>
+                            <div>⏱️ ${day.workout}m</div>
+                            <div>🔥 ${day.calories}kcal</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('weeklySummary').innerHTML = summaryHtml;
+        }
+
+        function updateWeeklyStats(data) {
+            const totals = data.week.reduce((acc, day) => ({
+                steps: acc.steps + day.steps,
+                workout: acc.workout + day.workout,
+                calories: acc.calories + day.calories
+            }), { steps: 0, workout: 0, calories: 0 });
+
+            const daysActive = data.week.filter(day => day.steps > 0 || day.workout > 0 || day.calories > 0).length;
+
+            document.getElementById('weeklySteps').textContent = totals.steps.toLocaleString();
+            document.getElementById('weeklyWorkout').textContent = totals.workout + ' min';
+            document.getElementById('weeklyCalories').textContent = totals.calories + ' kcal';
+            document.getElementById('daysActive').textContent = daysActive;
+        }
+
+        // Reset all data
+        function resetAllData() {
+            if (confirm('Are you sure you want to reset all data? This cannot be undone.')) {
+                localStorage.removeItem('fitnessData');
+                initializeData();
+                updateDashboard();
+                alert('All data has been reset!');
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            initializeData();
+            updateDashboard();
+        });
+    </script>
+</body>
+</html>
