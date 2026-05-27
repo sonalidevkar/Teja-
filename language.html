@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Language Learning - Fun & Interactive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF6B9D 0%, #C44569 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #FF6B9D;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #FFD93D;
+            padding-bottom: 10px;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #FF6B9D 0%, #C44569 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .nav-tab:hover {
+            transform: translateY(-2px);
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Daily Lesson Section */
+        .lesson-card {
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .lesson-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .lesson-content {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .lesson-pronunciation {
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .btn-lesson {
+            background: white;
+            color: #6366F1;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-lesson:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* New Words Section */
+        .words-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .word-card {
+            background: linear-gradient(135deg, #FFA500 0%, #FFB347 100%);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .word-card:hover {
+            transform: scale(1.1) rotateY(10deg);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .word-card.revealed {
+            background: linear-gradient(135deg, #FF6B9D 0%, #C44569 100%);
+        }
+
+        .word-text {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .word-translation {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        /* Quiz Section */
+        .quiz-question {
+            background: linear-gradient(135deg, #00D4FF 0%, #0099FF 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .quiz-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .quiz-option:hover {
+            background: white;
+            color: #0099FF;
+            transform: scale(1.05);
+        }
+
+        .quiz-option.correct {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .quiz-option.incorrect {
+            background: #F44336;
+            border-color: #F44336;
+        }
+
+        .quiz-result {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .quiz-result.show {
+            display: block;
+        }
+
+        /* Progress & Stats */
+        .stats-box {
+            background: linear-gradient(135deg, #FFD93D 0%, #FFA500 100%);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            display: inline-block;
+            margin: 10px 15px;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #FF6B9D;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FF6B9D 0%, #FFD93D 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #FF6B9D 0%, #C44569 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .nav-tab {
+                flex: 1;
+                min-width: 80px;
+            }
+
+            .words-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-item {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌍 Learn Languages 🎓</h1>
+            <p class="subtitle">Fun Learning for Kids</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('lesson')">📚 Daily Lesson</button>
+            <button class="nav-tab" onclick="switchTab('words')">🆕 New Words</button>
+            <button class="nav-tab" onclick="switchTab('quiz')">🎮 Quiz Game</button>
+        </div>
+
+        <!-- Daily Lesson Section -->
+        <div id="lesson" class="content-section active">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 33%;"></div>
+            </div>
+
+            <div class="lesson-card">
+                <div class="lesson-title">Today's Lesson</div>
+                <div class="lesson-content" id="lessonWord">Hello</div>
+                <div class="lesson-pronunciation">Pronunciation: hə-ˈlō</div>
+                <button class="btn-lesson" onclick="playPronunciation()">🔊 Listen</button>
+            </div>
+
+            <div class="stats-box">
+                <div class="stat-item">
+                    <div class="stat-number" id="lessonDays">15</div>
+                    <div class="stat-label">Days Learned</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="lessonStreak">7</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="nextLesson()">Next Lesson →</button>
+        </div>
+
+        <!-- New Words Section -->
+        <div id="words" class="content-section">
+            <h3 style="color: #FF6B9D; margin-bottom: 20px; text-align: center;">Click on cards to learn!</h3>
+
+            <div class="words-grid" id="wordsGrid">
+                <!-- Words will be generated by JavaScript -->
+            </div>
+
+            <div class="stats-box">
+                <div class="stat-item">
+                    <div class="stat-number" id="wordsLearned">45</div>
+                    <div class="stat-label">Words Learned</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="wordsToday">5</div>
+                    <div class="stat-label">Today</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Game Section -->
+        <div id="quiz" class="content-section">
+            <div class="stats-box">
+                <div class="stat-item">
+                    <div class="stat-number" id="quizScore">0</div>
+                    <div class="stat-label">Score</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="quizQuestion">1</div>
+                    <div class="stat-label">Question</div>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="quiz-text" id="quizText">What does "Hello" mean?</div>
+                <div class="quiz-options" id="quizOptions">
+                    <!-- Options will be generated by JavaScript -->
+                </div>
+                <div class="quiz-result" id="quizResult"></div>
+            </div>
+
+            <button class="btn-primary" onclick="nextQuiz()" id="nextQuizBtn" style="margin-top: 20px;">Next Question →</button>
+        </div>
+    </div>
+
+    <script>
+        // Language Data
+        const lessons = [
+            { word: "Hello", pronunciation: "hə-ˈlō", meaning: "Greeting" },
+            { word: "Good Morning", pronunciation: "ˈɡo͝od ˈmȯr-niŋ", meaning: "Morning greeting" },
+            { word: "Thank You", pronunciation: "ˈthaŋk ˈyo͞o", meaning: "Gratitude" },
+            { word: "Please", pronunciation: "ˈplēz", meaning: "Polite request" },
+            { word: "Goodbye", pronunciation: "ˌɡo͝od-ˈbī", meaning: "Farewell" }
+        ];
+
+        const newWords = [
+            { word: "🍎 Apple", translation: "Manzana (Spanish)" },
+            { word: "🐶 Dog", translation: "Perro (Spanish)" },
+            { word: "🌞 Sun", translation: "Sol (Spanish)" },
+            { word: "🏠 House", translation: "Casa (Spanish)" },
+            { word: "🌳 Tree", translation: "Árbol (Spanish)" },
+            { word: "🦋 Butterfly", translation: "Mariposa (Spanish)" }
+        ];
+
+        const quizzes = [
+            {
+                question: "What does 'Hello' mean?",
+                options: ["Goodbye", "Greeting", "Thank you", "Please"],
+                correct: 1
+            },
+            {
+                question: "What does 'Apple' mean in Spanish?",
+                options: ["Perro", "Manzana", "Casa", "Sol"],
+                correct: 1
+            },
+            {
+                question: "What does 'Gracias' mean?",
+                options: ["Goodbye", "Please", "Thank you", "Hello"],
+                correct: 2
+            },
+            {
+                question: "What does 'Dog' mean in Spanish?",
+                options: ["Gato", "Perro", "Pájaro", "Pez"],
+                correct: 1
+            },
+            {
+                question: "What does 'Please' mean?",
+                options: ["Adiós", "Por favor", "Hola", "Gracias"],
+                correct: 1
+            }
+        ];
+
+        let currentLessonIndex = 0;
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let answered = false;
+
+        // Initialize
+        function init() {
+            generateWords();
+            displayLesson();
+            displayQuiz();
+        }
+
+        // Switch Tabs
+        function switchTab(tabName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Daily Lesson Functions
+        function displayLesson() {
+            const lesson = lessons[currentLessonIndex];
+            document.getElementById('lessonWord').textContent = lesson.word;
+            document.getElementById('lessonDays').textContent = currentLessonIndex + 1;
+        }
+
+        function nextLesson() {
+            if (currentLessonIndex < lessons.length - 1) {
+                currentLessonIndex++;
+            } else {
+                currentLessonIndex = 0;
+            }
+            displayLesson();
+        }
+
+        function playPronunciation() {
+            const lesson = lessons[currentLessonIndex];
+            const utterance = new SpeechSynthesisUtterance(lesson.word);
+            utterance.rate = 0.8;
+            speechSynthesis.speak(utterance);
+        }
+
+        // Generate Words Grid
+        function generateWords() {
+            const wordsGrid = document.getElementById('wordsGrid');
+            wordsGrid.innerHTML = '';
+
+            newWords.forEach((wordItem, index) => {
+                const card = document.createElement('div');
+                card.className = 'word-card';
+                card.innerHTML = `
+                    <div class="word-text">${wordItem.word}</div>
+                    <div class="word-translation" style="display: none;">${wordItem.translation}</div>
+                `;
+                card.onclick = () => toggleWord(card);
+                wordsGrid.appendChild(card);
+            });
+        }
+
+        function toggleWord(card) {
+            const translation = card.querySelector('.word-translation');
+            card.classList.toggle('revealed');
+            translation.style.display = translation.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Quiz Functions
+        function displayQuiz() {
+            const quiz = quizzes[currentQuizIndex];
+            document.getElementById('quizText').textContent = quiz.question;
+            document.getElementById('quizQuestion').textContent = currentQuizIndex + 1;
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+
+            quiz.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.textContent = option;
+                btn.onclick = () => answerQuiz(index, quiz.correct);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('quizResult').classList.remove('show');
+            answered = false;
+        }
+
+        function answerQuiz(selected, correct) {
+            if (answered) return;
+            answered = true;
+
+            const options = document.querySelectorAll('.quiz-option');
+            options[selected].classList.add(selected === correct ? 'correct' : 'incorrect');
+            options[correct].classList.add('correct');
+
+            const resultEl = document.getElementById('quizResult');
+            if (selected === correct) {
+                quizScore++;
+                resultEl.textContent = '✅ Correct! Great job!';
+                resultEl.style.background = '#4CAF50';
+            } else {
+                resultEl.textContent = '❌ Oops! Try again next time.';
+                resultEl.style.background = '#F44336';
+            }
+            resultEl.classList.add('show');
+
+            document.getElementById('quizScore').textContent = quizScore;
+        }
+
+        function nextQuiz() {
+            if (currentQuizIndex < quizzes.length - 1) {
+                currentQuizIndex++;
+            } else {
+                currentQuizIndex = 0;
+                quizScore = 0;
+                document.getElementById('quizScore').textContent = quizScore;
+            }
+            displayQuiz();
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
